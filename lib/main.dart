@@ -140,8 +140,25 @@ class _MyHomePageState extends State<MyHomePage> {
         page = GeneratorPage();
         break;
       case 1:
-        page = Placeholder();
+        page = FavoritesPage();
         break;
+      case 2:
+        page = FavoritesPages();
+        break; 
+      /* case 3:
+        page = Placeholder();//SettingsPage();
+        break;
+      case 4:
+        page = Placeholder();//AboutPage();
+        break;
+      case 5:
+        page = Placeholder();//HelpPage();
+        break;
+      case 6:
+        // Handle exit logic here, if needed.
+        // For now, we can just show a message.
+        page = Center(child: Text('Exit selected'));
+        break; */
       default:
         throw UnimplementedError('no widget for $selectedIndex');
     }
@@ -162,6 +179,26 @@ class _MyHomePageState extends State<MyHomePage> {
                     NavigationRailDestination(
                       icon: Icon(Icons.favorite),
                       label: Text('Favorites'),
+                    ),
+                    NavigationRailDestination(
+                      icon: Icon(Icons.list),
+                      label: Text('Favorites List'),
+                    ),
+                    NavigationRailDestination(
+                      icon: Icon(Icons.settings),
+                      label: Text('Settings'),
+                    ),
+                    NavigationRailDestination(
+                      icon: Icon(Icons.info),
+                      label: Text('About'),
+                    ),
+                    NavigationRailDestination(
+                      icon: Icon(Icons.help),
+                      label: Text('Help'),
+                    ),
+                    NavigationRailDestination(
+                      icon: Icon(Icons.exit_to_app),
+                      label: Text('Exit'),
                     ),
                   ],
                   selectedIndex: selectedIndex,  // ← Add this.
@@ -233,7 +270,7 @@ class GeneratorPage extends StatelessWidget {
   }
 }
 
-class Placeholder extends StatelessWidget {
+class FavoritesPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var appState = context.watch<MyAppState>();
@@ -255,7 +292,7 @@ class Placeholder extends StatelessWidget {
           Text("favorites:"),
           for (var favorite in favorites)
             ListTile(
-              title: Text(favorite.toString()), // Assuming `favorite` has a meaningful toString()
+              title: Center(child: Text(favorite.toString())), // Assuming `favorite` has a meaningful toString()
             ),
           BigCard(pair: pair),
           //SizedBox(height: 10),
@@ -280,6 +317,34 @@ class Placeholder extends StatelessWidget {
           ), */
         ],
       ),
+    );
+  }
+}
+
+class FavoritesPages extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    var appState = context.watch<MyAppState>();
+
+    if (appState.favorites.isEmpty) {
+      return Center(
+        child: Text('No favorites yet.'),
+      );
+    }
+
+    return ListView(
+      children: [
+        Padding(
+          padding: const EdgeInsets.all(20),
+          child: Text('You have '
+              '${appState.favorites.length} favorites:'),
+        ),
+        for (var pair in appState.favorites)
+          ListTile(
+            leading: Icon(Icons.favorite),
+            title: Text(pair.asLowerCase),
+          ),
+      ],
     );
   }
 }
